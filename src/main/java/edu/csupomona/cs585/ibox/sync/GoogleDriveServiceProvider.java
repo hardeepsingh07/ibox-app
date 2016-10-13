@@ -1,8 +1,10 @@
 package edu.csupomona.cs585.ibox.sync;
 
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Arrays;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
@@ -17,8 +19,8 @@ import com.google.api.services.drive.DriveScopes;
 
 public class GoogleDriveServiceProvider {
 
-	private static String CLIENT_ID = "PASTE_YOUR_CLIENT_ID_HERE";
-	private static String CLIENT_SECRET = "PASTE_YOUR_CLIENT_SECRET_HERE";
+	private static String CLIENT_ID = "536338110594-glfj9bpo9cucm6n034srg2p6okda0emf.apps.googleusercontent.com";
+	private static String CLIENT_SECRET = "VTvC_YVoHSSt87GOIxWLAPEO";
 
 	private static String REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob";
 
@@ -29,7 +31,8 @@ public class GoogleDriveServiceProvider {
 		try {
 			initGoogleDriveServices();
 		} catch (IOException e) {
-			System.out.println("Failed to create the Google drive client. Please check your Internet connection and your Google credentials.");
+			System.out.println(
+					"Failed to create the Google drive client. Please check your Internet connection and your Google credentials.");
 			e.printStackTrace();
 		}
 	}
@@ -45,21 +48,26 @@ public class GoogleDriveServiceProvider {
 		HttpTransport httpTransport = new NetHttpTransport();
 		JsonFactory jsonFactory = new JacksonFactory();
 
-		GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-				httpTransport, jsonFactory, CLIENT_ID, CLIENT_SECRET, Arrays.asList(DriveScopes.DRIVE))
-		.setAccessType("online")
-		.setApprovalPrompt("auto").build();
+		GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, jsonFactory,
+				CLIENT_ID, CLIENT_SECRET, Arrays.asList(DriveScopes.DRIVE)).setAccessType("online")
+						.setApprovalPrompt("auto").build();
 
 		String url = flow.newAuthorizationUrl().setRedirectUri(REDIRECT_URI).build();
 		System.out.println("Please open the following URL in your browser then type the authorization code:");
 		System.out.println("  " + url);
+		try {
+			Desktop.getDesktop().browse(new URL(url).toURI());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		System.out.print("Enter Code Here: ");
 		String code = br.readLine();
 
 		GoogleTokenResponse response = flow.newTokenRequest(code).setRedirectUri(REDIRECT_URI).execute();
 		GoogleCredential credential = new GoogleCredential().setFromTokenResponse(response);
 
-		//Create a new authorized API client
+		// Create a new authorized API client
 		googleDriveClient = new Drive.Builder(httpTransport, jsonFactory, credential).build();
 	}
 
