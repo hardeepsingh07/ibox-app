@@ -52,7 +52,7 @@
         <configuration>
           <includes>
             <include>GoogleDriveFileSyncManagerTest.java</include>
-            <include>GoogleDriveFileSyncManagerIntegrationTest.java</include>
+            <!-- <include>GoogleDriveFileSyncManagerIntegrationTest.java</include> -->
           </includes>
         </configuration>
       </plugin>
