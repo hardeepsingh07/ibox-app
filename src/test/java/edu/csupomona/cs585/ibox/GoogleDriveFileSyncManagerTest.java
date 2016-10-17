@@ -2,7 +2,6 @@ package edu.csupomona.cs585.ibox;
 
 import junit.framework.TestCase;
 import org.junit.*;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.isA;
@@ -106,7 +105,7 @@ public class GoogleDriveFileSyncManagerTest extends TestCase {
 
 		// setUp mock for delete method
 		when(mockDrive.files()).thenReturn(files);
-		when(files.delete(fileID)).thenReturn(delete);
+		when(files.delete(isA(String.class))).thenReturn(delete);
 		when(delete.execute()).thenReturn(null);
 
 		gdfsm.deleteFile(localFile);

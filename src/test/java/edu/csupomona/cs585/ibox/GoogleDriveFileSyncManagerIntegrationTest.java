@@ -40,8 +40,10 @@ public class GoogleDriveFileSyncManagerIntegrationTest {
 			System.out.println("File Add Failed...");
 			System.out.println(e.getMessage());
 		}
+		String id = gdfsm.getFileId(fileName);
 		System.out.println("File Add was Successful");
-		System.out.println("File: " + fileName + " -- ID: " + gdfsm.getFileId(fileName));
+		assertNotNull(gdfsm.getFileId(fileName));
+		System.out.println("File: " + fileName + " -- ID: " + id);
 	}
 
 	@Test
@@ -59,7 +61,8 @@ public class GoogleDriveFileSyncManagerIntegrationTest {
 			System.out.println(e.getMessage());
 		}
 		System.out.println("File Update was Successful");
-		System.out.println("File: " + fileName + " -- ID: " + gdfsm.getFileId(fileName));
+		assertNotNull(gdfsm.getFileId(fileName));
+		System.out.println("File: " + fileName + " -- ID: " + id);
 	}
 
 	@Test
